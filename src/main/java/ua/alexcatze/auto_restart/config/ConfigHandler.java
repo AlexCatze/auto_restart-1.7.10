@@ -64,7 +64,7 @@ public final class ConfigHandler {
         RESTART_COMMAND = loadPropString("restart_command", desc, RESTART_COMMAND);
 
         desc = "Ingame command to restart server.";
-        RESTART_COMMAND = loadPropString("ingame_restart_command", desc, RESTART_COMMAND);
+        RESTART_COMMAND_INGAME = loadPropString("ingame_restart_command", desc, RESTART_COMMAND);
 
         if (config.hasChanged()) config.save();
     }
