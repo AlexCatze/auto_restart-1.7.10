@@ -14,7 +14,7 @@ import ua.alexcatze.auto_restart.config.ConfigHandler;
 import ua.alexcatze.auto_restart.task.AutoRestartTask;
 import ua.alexcatze.auto_restart.util.ServerRestarter;
 
-@Mod(modid = AutoRestart.MODID)
+@Mod(modid = AutoRestart.MODID, acceptableRemoteVersions = "*")
 public class AutoRestart {
 
     public static Logger logger = LogManager.getLogger(AutoRestart.MODID);
