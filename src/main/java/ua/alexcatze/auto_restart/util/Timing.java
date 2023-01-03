@@ -1,4 +1,4 @@
-package ua.alexcatze.auto_restart.config;
+package ua.alexcatze.auto_restart.util;
 
 import java.util.Optional;
 
@@ -15,13 +15,13 @@ public class Timing {
     }
 
     // package-private
-    static Timing build(long value, TimeUnit timeUnit) {
+    public static Timing build(long value, TimeUnit timeUnit) {
 
         return new Timing(value, timeUnit);
     }
 
     // package-private
-    static Optional<Timing> parse(String timingString) {
+    public static Optional<Timing> parse(String timingString) {
 
         String valueString = timingString.substring(0, timingString.length() - 1);
         String timeUnitString = timingString.substring(timingString.length() - 1);

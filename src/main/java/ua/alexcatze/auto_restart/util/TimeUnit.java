@@ -1,4 +1,4 @@
-package ua.alexcatze.auto_restart.config;
+package ua.alexcatze.auto_restart.util;
 
 import java.util.Locale;
 import java.util.Optional;

@@ -3,11 +3,12 @@ package ua.alexcatze.auto_restart.util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.alexcatze.auto_restart.AutoRestart;
-import ua.alexcatze.auto_restart.config.ConfigHandler;
 
 public class ServerRestarter {
 
@@ -15,25 +16,13 @@ public class ServerRestarter {
 
     private static volatile boolean shouldDoRestart = false;
 
-    public static void restart(MinecraftServer server) {
-
+    public static void restart(MinecraftServer server, String reason) {
         shouldDoRestart = true;
         createRestartFile();
+        for (EntityPlayerMP player :
+                (ArrayList<EntityPlayerMP>) new ArrayList(server.getConfigurationManager().playerEntityList))
+            player.playerNetServerHandler.kickPlayerFromServer(reason);
         server.initiateShutdown();
-        // server.halt( false );
-    }
-
-    public static void restartServer() {
-
-        if (!ConfigHandler.USES_EXTERNAL_RESTART_SCRIPT) {
-            LOGGER.info("Restart Server");
-            ProcessBuilder builder = new ProcessBuilder(ConfigHandler.RESTART_COMMAND);
-            try {
-                builder.start();
-            } catch (IOException exception) {
-                LOGGER.error("Auto Restart could not be done.", exception);
-            }
-        }
     }
 
     public static void createExceptionFile() {

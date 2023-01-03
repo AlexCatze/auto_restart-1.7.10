@@ -5,19 +5,28 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+import java.util.ArrayList;
 import java.util.Timer;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.alexcatze.auto_restart.config.ConfigHandler;
-import ua.alexcatze.auto_restart.task.AutoRestartTask;
+import ua.alexcatze.auto_restart.commands.RestartAfterCommand;
+import ua.alexcatze.auto_restart.commands.RestartCommand;
+import ua.alexcatze.auto_restart.util.AutoRestartTask;
+import ua.alexcatze.auto_restart.util.ConfigHandler;
 import ua.alexcatze.auto_restart.util.ServerRestarter;
 
 @Mod(modid = AutoRestart.MODID, acceptableRemoteVersions = "*")
 public class AutoRestart {
 
+    public static final ArrayList<AutoRestartTask> AUTO_RESTART_TASKS = new ArrayList<>();
     public static Logger logger = LogManager.getLogger(AutoRestart.MODID);
+
+    public static String defaultRestartReason = StatCollector.translateToLocal("autorestart.title.restart");
+
+    public static final String MODID = "auto_restart";
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
@@ -26,30 +35,21 @@ public class AutoRestart {
 
     @Mod.EventHandler
     public static void handleServerStoppedEvent(FMLServerStoppedEvent event) {
-        if (ServerRestarter.shouldDoRestart()) {
-            ServerRestarter.restartServer();
-        } else {
-            if (MinecraftServer.getServer().isServerRunning()) {
-                if (ConfigHandler.AUTO_RESTART_ON_CRASH) {
-                    ServerRestarter.restartServer();
-                }
-            } else {
-                ServerRestarter.createStopFile();
-            }
+        if (!ServerRestarter.shouldDoRestart()) {
+            ServerRestarter.createStopFile();
         }
     }
 
     @Mod.EventHandler
     public static void handleServerStartedEvent(FMLServerStartedEvent event) {
-        new Timer(true).scheduleAtFixedRate(new AutoRestartTask(MinecraftServer.getServer()), 60 * 1000, 1000);
+        new Timer(true).scheduleAtFixedRate(new AutoRestartService(MinecraftServer.getServer()), 60 * 1000, 1000);
 
         ((CommandHandler) MinecraftServer.getServer().getCommandManager()).registerCommand(new RestartCommand());
+        ((CommandHandler) MinecraftServer.getServer().getCommandManager()).registerCommand(new RestartAfterCommand());
     }
 
     @Mod.EventHandler
     public static void handlerServerStartingEvent(FMLServerStartingEvent event) {
         ServerRestarter.createExceptionFile();
     }
-
-    public static final String MODID = "auto_restart";
 }

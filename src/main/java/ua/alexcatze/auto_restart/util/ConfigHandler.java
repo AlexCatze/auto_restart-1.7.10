@@ -1,4 +1,4 @@
-package ua.alexcatze.auto_restart.config;
+package ua.alexcatze.auto_restart.util;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -12,7 +12,6 @@ import ua.alexcatze.auto_restart.AutoRestart;
 public final class ConfigHandler {
     public static Configuration config;
 
-    public static boolean USES_EXTERNAL_RESTART_SCRIPT = true;
     public static boolean AUTO_RESTART_ENABLED = true;
     public static boolean AUTO_RESTART_ON_CRASH = true;
     public static List<String> AUTO_RESTART_WARNING_TIMES = new ArrayList<>(Arrays.asList(
@@ -22,13 +21,11 @@ public final class ConfigHandler {
             Timing.build(2, TimeUnit.SECONDS).toString(),
             Timing.build(1, TimeUnit.SECONDS).toString()));
     public static List<String> AUTO_RESTART_TIMES = new ArrayList<>(Arrays.asList(
-            AutoRestartTime.build(14, 0).toString(),
-            AutoRestartTime.build(16, 32).toString()));
+            AutoRestartTask.build(14, 0).toString(),
+            AutoRestartTask.build(16, 32).toString()));
 
-    public static String RESTART_COMMAND = "";
     public static String RESTART_COMMAND_INGAME = "restart";
-
-    public static final ArrayList<AutoRestartTime> autoRestartTimes = new ArrayList<>();
+    public static String RESTART_AFTER_COMMAND_INGAME = "restartafter";
 
     public static final ArrayList<Timing> autoRestartWarningTimes = new ArrayList<>();
 
@@ -44,8 +41,6 @@ public final class ConfigHandler {
     public static void load() {
         String desc;
 
-        desc = "Is the server started by an external restart script?";
-        USES_EXTERNAL_RESTART_SCRIPT = loadPropBool("use_external_restart_script", desc, USES_EXTERNAL_RESTART_SCRIPT);
         desc = "Should the Server do automatic restarts?";
         AUTO_RESTART_ENABLED = loadPropBool("auto_restart", desc, AUTO_RESTART_ENABLED);
         desc = "Should the server be automatically restarted when it crashes?";
@@ -59,24 +54,24 @@ public final class ConfigHandler {
         AUTO_RESTART_TIMES = loadPropListString("times", desc, AUTO_RESTART_TIMES);
         loadAutoRestartTimes();
 
-        desc =
-                "Command that is executed on Server stopped to restart the server. Only called if \\\"use_external_restart_script\\\" is false.";
-        RESTART_COMMAND = loadPropString("restart_command", desc, RESTART_COMMAND);
-
         desc = "Ingame command to restart server.";
         RESTART_COMMAND_INGAME = loadPropString("ingame_restart_command", desc, RESTART_COMMAND_INGAME);
+
+        desc = "Ingame command to schedule additional server restart.";
+        RESTART_AFTER_COMMAND_INGAME =
+                loadPropString("ingame_restart_after_command", desc, RESTART_AFTER_COMMAND_INGAME);
 
         if (config.hasChanged()) config.save();
     }
 
     private static synchronized void loadAutoRestartTimes() {
 
-        autoRestartTimes.clear();
+        AutoRestart.AUTO_RESTART_TASKS.clear();
         List<String> autoRestartTimeStrings = AUTO_RESTART_TIMES;
         for (int i = 0; i < autoRestartTimeStrings.size(); i++) {
-            Optional<AutoRestartTime> autoRestartTime = AutoRestartTime.parse(autoRestartTimeStrings.get(i));
+            Optional<AutoRestartTask> autoRestartTime = AutoRestartTask.parse(autoRestartTimeStrings.get(i));
             if (autoRestartTime.isPresent()) {
-                autoRestartTimes.add(autoRestartTime.get());
+                AutoRestart.AUTO_RESTART_TASKS.add(autoRestartTime.get());
             } else {
                 AutoRestart.logger.warn(
                         "{}: Removed invalid {} from auto restart times.",

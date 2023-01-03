@@ -1,0 +1,3 @@
+autorestart.title.restartafter=Перезапуск сервера через %s...
+autorestart.title.scheduledrestart=Перезапуск сервера запланирован на: %s
+autorestart.title.restart=Перезапуск сервера

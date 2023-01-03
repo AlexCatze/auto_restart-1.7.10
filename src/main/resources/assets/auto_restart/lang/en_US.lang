@@ -1,0 +1,3 @@
+autorestart.title.restartafter=Restarting in %s...
+autorestart.title.scheduledrestart=Scheduled restart at: %s
+autorestart.title.restart=Server restart
