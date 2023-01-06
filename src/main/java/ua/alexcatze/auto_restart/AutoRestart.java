@@ -18,7 +18,7 @@ import ua.alexcatze.auto_restart.util.AutoRestartTask;
 import ua.alexcatze.auto_restart.util.ConfigHandler;
 import ua.alexcatze.auto_restart.util.ServerRestarter;
 
-@Mod(modid = AutoRestart.MODID, acceptableRemoteVersions = "*")
+@Mod(modid = AutoRestart.MODID, version = AutoRestart.VERSION,name = AutoRestart.MODNAME, acceptableRemoteVersions = "*")
 public class AutoRestart {
 
     public static final ArrayList<AutoRestartTask> AUTO_RESTART_TASKS = new ArrayList<>();
@@ -26,7 +26,9 @@ public class AutoRestart {
 
     public static String defaultRestartReason = StatCollector.translateToLocal("autorestart.title.restart");
 
-    public static final String MODID = "auto_restart";
+    public static final String MODID = "GRADLETOKEN_MODID";
+    public static final String VERSION = "GRADLETOKEN_VERSION";
+    public static final String MODNAME = "GRADLETOKEN_MODNAME";
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
