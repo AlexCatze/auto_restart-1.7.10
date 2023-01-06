@@ -12,7 +12,7 @@ import ua.alexcatze.auto_restart.util.AutoRestartTask;
 import ua.alexcatze.auto_restart.util.ConfigHandler;
 import ua.alexcatze.auto_restart.util.Timing;
 
-public class RestartAfterCommand extends CommandBase {
+public class CommandRestartAfter extends CommandBase {
 
     @Override
     public String getCommandName() {

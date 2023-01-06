@@ -7,7 +7,7 @@ import ua.alexcatze.auto_restart.AutoRestart;
 import ua.alexcatze.auto_restart.util.ConfigHandler;
 import ua.alexcatze.auto_restart.util.ServerRestarter;
 
-public class RestartCommand extends CommandBase {
+public class CommandRestart extends CommandBase {
 
     @Override
     public String getCommandName() {
