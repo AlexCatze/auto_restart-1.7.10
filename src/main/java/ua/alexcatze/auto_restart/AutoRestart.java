@@ -6,6 +6,8 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import java.util.ArrayList;
 import java.util.Timer;
+
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
@@ -37,13 +39,13 @@ public class AutoRestart {
     public static void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.loadConfig(event.getSuggestedConfigurationFile());
     }
-    
-        @Mod.EventHandler
-        public static void handleServerStoppedEvent(FMLServerStoppedEvent event) {
-            if (!ServerRestarter.shouldDoRestart()) {
-                ServerRestarter.createStopFile();
-            }
+
+    @Mod.EventHandler
+    public static void handleServerStoppedEvent(FMLServerStoppedEvent event) {
+        if (!ServerRestarter.shouldDoRestart()) {
+            ServerRestarter.createStopFile();
         }
+    }
 
     @Mod.EventHandler
     public static void handleServerStartedEvent(FMLServerStartedEvent event) {
