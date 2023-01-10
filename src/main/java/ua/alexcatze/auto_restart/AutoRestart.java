@@ -38,13 +38,7 @@ public class AutoRestart {
     public static void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.loadConfig(event.getSuggestedConfigurationFile());
     }
-
-    @Mod.EventHandler
-    public static void handleServerStoppedEvent(FMLServerStoppedEvent event) {
-        if (!ServerRestarter.shouldDoRestart()) {
-            ServerRestarter.createStopFile();
-        }
-    }
+    
 
     @Mod.EventHandler
     public static void handleServerStartedEvent(FMLServerStartedEvent event) {
